@@ -99,7 +99,7 @@ class tuyasmartplugPlugin(
             apiKey = "",
             apiSecret = "",
             apiRegion  ="us",
-            subnet  ="",
+            subnet="",
 
         )
     def set_settings_from_tinytuya_apiscan(self,devices):
@@ -405,9 +405,11 @@ class tuyasmartplugPlugin(
                 if os.path.exists(snapshotpath):
                     os.remove(snapshotpath)
 
+                subnets = ""
                 subnets = self._settings.get(["subnets"])
+                print(subnets)
 
-                tinytuya.scanner.scan(forcescan=subnets.split(","),assume_yes=True)
+                tinytuya.scanner.scan(forcescan=subnets.split(","), assume_yes=True)
 
                 snapshotjson = open(snapshotpath, "r").read()
                 self._tuyasmartplug_logger.debug(snapshotjson)
