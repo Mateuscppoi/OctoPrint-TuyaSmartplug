@@ -420,7 +420,6 @@ class tuyasmartplugPlugin(
                 if os.path.exists(configurationfilepath):
                     os.remove(configurationfilepath)
                 formatedscanresults = ""
-				formatedscanresults.split()
                 deviceindex=0
                 for device in scanresults['devices']:
                     formatedscanresults += "Device #" + str(deviceindex) + "\n"
