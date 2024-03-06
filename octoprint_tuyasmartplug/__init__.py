@@ -485,6 +485,7 @@ class tuyasmartplugPlugin(
                     "Received @TUYAON command, attempting power on of %s."
                     % name
                 )
+                print("Received @TUYAON command, attempting power on of %s." % name)
                 plug = self.plug_search(
                     self._settings.get(["arrSmartplugs"]), "ip", name
                 )
@@ -494,6 +495,7 @@ class tuyasmartplugPlugin(
                     )
                     self._tuyasmartplug_logger.debug(plug)
                     if plug["gcodeEnabled"]:
+                        print("turning on")
                         t = threading.Timer(
                             int(plug["gcodeOnDelay"]),
                             self.turn_on,
@@ -501,33 +503,36 @@ class tuyasmartplugPlugin(
                         )
                         t.start()
                         return None
-                    elif cmd.startswith("@TUYAOFF"):
-                        name = re.sub(r"^@TUYAOFF\s?", "", cmd)
-                        self._tuyasmartplug_logger.debug(
-                            "Received TUYAOFF command, attempting power off of %s."
-                            % name
+            elif cmd.startswith("@TUYAOFF"):
+                name = re.sub(r"^@TUYAOFF\s?", "", cmd)
+                self._tuyasmartplug_logger.debug(
+                    "Received TUYAOFF command, attempting power off of %s."
+                    % name
+                )
+                print("Received TUYAOFF command, attempting power off of %s."
+                      % name)
+                plug = self.plug_search(
+                    self._settings.get(["arrSmartplugs"]),
+                    "ip",
+                    name,
+                )
+                if not plug:
+                    plug = self.plug_search(
+                        self._settings.get(["arrSmartplugs"]),
+                        "label",
+                        name,
+                    )
+                    self._tuyasmartplug_logger.debug(plug)
+                    if plug["gcodeEnabled"]:
+                        print("turning off")
+                        # self.gcode_turn_off(plug)
+                        t = threading.Timer(
+                            int(plug["gcodeOffDelay"]),
+                            self.gcode_turn_off,
+                            args=[plug],
                         )
-                        plug = self.plug_search(
-                            self._settings.get(["arrSmartplugs"]),
-                            "ip",
-                            name,
-                        )
-                        if not plug:
-                            plug = self.plug_search(
-                                self._settings.get(["arrSmartplugs"]),
-                                "label",
-                                name,
-                            )
-                            self._tuyasmartplug_logger.debug(plug)
-                            if plug["gcodeEnabled"]:
-                                #self.gcode_turn_off(plug)
-                                t = threading.Timer(
-                                    int(plug["gcodeOffDelay"]),
-                                    self.gcode_turn_off,
-                                    args=[plug],
-                                )
-                                t.start()
-                                return None
+                        t.start()
+                        return None
 
     # ~~ Softwareupdate hook
 
