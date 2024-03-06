@@ -406,7 +406,7 @@ class tuyasmartplugPlugin(
                     os.remove(snapshotpath)
 
                 subnets = ""
-                subnets = self._settings.get(["subnets"])
+                subnets = self._settings.get(["subnet"])
                 print(subnets)
 
                 tinytuya.scanner.scan(forcescan=subnets.split(","), assume_yes=True)
